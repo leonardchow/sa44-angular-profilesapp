@@ -1,0 +1,26 @@
+.scrollArea {
+  /* overflow: scroll; */
+  height: 200px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 8px;
+}
+
+.comment-email {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.7em;
+  margin-top: 3px;
+}
+
+.comment-comment {
+
+}
+
+.comment-you {
+  text-align: right;
+}
+.comment-not-you {
+  text-align: left;
+}

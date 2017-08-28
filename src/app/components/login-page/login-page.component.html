@@ -1,0 +1,46 @@
+<div *ngIf="loggedIn" class="col-xs-6">
+  <h5>Login Status</h5>
+  You are logged in as {{ userEmail }}
+  <input class="btn btn-warning" type="button" value="Logout" (click)="logout()" />
+</div>
+<div *ngIf="!loggedIn" class="col-xs-12 col-xs-offset-0 col-sm-6 col-sm-offset-3">
+  <h1>Login page</h1>
+
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h4>
+        You are not logged in. Please use one of these options:
+      </h4>
+    </div>
+    <div class="panel-body">
+      <p>
+        <input class="btn btn-success" type="button" value="Login with Google" (click)="loginWithGoogle()" />
+      </p>
+      <p>
+        <input class="btn btn-primary" type="button" value="Login with Facebook" (click)="loginWithFacebook()" />
+      </p>
+
+      <form (submit)="submitWithEmail($event)">
+        <div class="row">
+          <div class="col-xs-12">
+            <p>
+              <input class="form-control" name="email" [(ngModel)]="email" type="text" placeholder="janedoe@email.com" />
+            </p>
+            <p>
+              <input class="form-control" name="password" [(ngModel)]="password" type="password" placeholder="password" />
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <input class="btn btn-primary" type="submit" value="Login with Email" />
+          </div>
+          <div class="col-sm-4">
+            <input class="btn btn-default" type="button" (click)="signUp()" value="Sign up with Email" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>

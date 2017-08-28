@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div *ngIf="loggedIn" class="col-xs-6">
+      <h6>Please select an option:</h6>
+      <div>
+        <input class="btn btn-default" type="button"
+          [value]="hasProfile ? 'Edit profile' : 'Create profile'"
+          (click)="navigateToCreate()"
+        />
+        <input class="btn btn-default" type="button" value="View list of users"
+          (click)="navigateToList()"
+        />
+      </div>
+    </div>
+
+    <app-login-page [loggedIn]="loggedIn" [userEmail]="userEmail"></app-login-page>
+    
+  </div>
+</div>

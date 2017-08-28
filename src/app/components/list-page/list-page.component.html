@@ -1,0 +1,80 @@
+<div class="row">
+  <div class="col-sm-12">
+
+    <div class="row" style="padding-top:10px;">
+      <div class="col-xs-12 col-sm-4">
+        <input class="form-control" type="text"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="filterUsers()"
+          placeholder="Filter by name..."
+        />
+      </div>
+
+      <div class="col-xs-12 col-sm-4">
+        <input class="form-control" type="text"
+          [(ngModel)]="skillsSearchTerm"
+          (ngModelChange)="filterBySkill()"
+          placeholder="Filter by skills..."
+        />
+      </div>
+    </div>
+
+    <div class="row" style="padding-top:10px;">
+
+      <div *ngFor="let user of users; let idx = index;">
+        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3" [ngClass]="{ 'hide' : ! user.visible }">
+          <div class="panel panel-default" style="width:15em;">
+            <div class="panel-body">
+              <p>
+                  <img src={{user.photoUrl}} style="max-width:10em;"/>
+              </p>
+              <p>
+                <!-- Likes -->
+                <span>{{ user.likes.length + ' likes. ' }}</span>
+                <input class="btn btn-xs" type="button"
+                  value="{{
+                    (user.likes.includes(userEmail) ? 'Unlike' : 'Like it!')
+                  }}"
+                  [ngClass]="{'btn-info': ! user.likes.includes(userEmail), 'btn-default': user.likes.includes(userEmail)}"
+                  (click)="onLike($event, idx)"
+                />
+              </p>
+              <p *ngIf="user.comments.length > 0 || true">
+                <!-- Comments -->
+                <a routerLink="/profile/{{user.key}}">{{ user.comments.length + ' comments. Click to add ' }}</a>
+              </p>
+              <h5>{{user.name}}</h5>
+              <h6 class="text-muted">Email:</h6>
+              <span><a href="mailto:{{user.email}}">{{user.email}}</a></span>
+              <h6 class="text-muted">Phone:</h6>                
+              <span><a href="tel:{{user.phone}}">{{user.phone}}</a>
+              </span>
+              <h6 class="text-muted">Age:</h6>                
+              <span>
+                {{user.getAge()}}
+              </span>
+              <h6 class="text-muted">Skills:</h6>                
+              <span *ngFor="let skill of user.skills">
+                <span class="label label-info">{{skill}}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+<!-- 
+    public email: string = "",
+    public name: string = "",
+    public phone: string = "",
+    public birthdate: number = null,
+    public photoUrl: string = "",
+    public skills: string[] = [""],
+
+ -->

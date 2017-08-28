@@ -1,0 +1,78 @@
+<div class="col-xs-3">
+
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div *ngIf="profile">
+        <p>
+          <img src={{profile.photoUrl}} style="max-width:10em;" />
+        </p>
+        <p>
+          <!-- Likes -->
+          <span>{{ profile.likes.length + ' likes. ' }}</span>
+          <input class="btn btn-xs" type="button" value="{{
+              (profile.likes.includes(userEmail) ? 'Unlike' : 'Like it!')
+            }}" [ngClass]="{'btn-info': ! profile.likes.includes(userEmail), 'btn-default': profile.likes.includes(userEmail)}"
+            (click)="onLike($event, idx)" />
+        </p>
+        <h5>{{profile.name}}</h5>
+        <h6 class="text-muted">Email:</h6>
+        <span><a href="mailto:{{profile.email}}">{{profile.email}}</a></span>
+        <h6 class="text-muted">Phone:</h6>
+        <span><a href="tel:{{profile.phone}}">{{profile.phone}}</a>
+        </span>
+        <h6 class="text-muted">Age:</h6>
+        <span>
+          {{profile.getAge()}}
+        </span>
+        <h6 class="text-muted">Skills:</h6>
+        <span *ngFor="let skill of profile.skills">
+          <span class="label label-info">{{skill}}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-xs-4">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <b>Comments</b>
+    </div>
+    <div class="panel-body">
+      <div class="scrollArea" #commentScrollArea>
+        <div *ngIf="profile">
+
+          <div *ngFor="let comment of profile.comments">
+            <div class="comment-email"
+              [ngClass]="{'text-muted': comment.email != userEmail,
+                          'text-primary': comment.email == userEmail,
+                          'comment-not-you': comment.email != userEmail,
+                          'comment-you': comment.email == userEmail
+                        }"
+            >
+              {{ comment.email }}
+            </div>
+            <div class="comment-comment"
+                [ngClass]="{'comment-not-you': comment.email != userEmail,
+                            'comment-you': comment.email == userEmail
+                          }"
+            >
+              {{ comment.comment }}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <form (submit)="submitComment($event)" #commentForm="ngForm">
+
+        <input class="form-control" type="text" name="newComment" [(ngModel)]="newComment" placeholder="Enter a comment..." />
+        <!-- (ngModelChange)="" -->
+
+        <input class="btn btn-primary btn-sm" type="submit" value="Comment" style="margin-top: 10px;" />
+
+      </form>
+    </div>
+  </div>
+
+</div>
