@@ -98,8 +98,13 @@ export class FirebaseDatabaseService {
     // })
   }
   
-  saveNewProfile(user: ProfileModel) {
-    return this.databaseRef.push(user);
+  saveNewProfile(user: ProfileModel, isAnEdit: boolean) {
+    if (isAnEdit) {
+      let preparedUser = ProfileModel.prepareForUpdate(user);
+      return this.databaseRef.child(user.key).update(preparedUser);
+    } else {
+      return this.databaseRef.push(user);
+    }
   }
 
   getAllProfiles() {
@@ -146,11 +151,19 @@ export class FirebaseDatabaseService {
   }
   
   getProfileByEmail(email: string): firebase.Promise<ProfileModel> {
-    return this.databaseRef.orderByChild('email').equalTo(email).once('value')
+    return this.databaseRef.orderByChild('email').equalTo(email).limitToFirst(1).once('value')
       .then(element => {
-        console.log("getProfileByEmail", element.key, element.val());
+        // console.log("getProfileByEmail: elKey", element.key)
+        console.log("getProfileByEmail: elVal", element.val())
         
-        //return ProfileModel.inflateProfile(element);
+        let profileKey = null;
+        for(let idxKey in element.val()) {
+          profileKey = idxKey
+          // Just get one
+          break;
+        }
+
+        return this.getProfile(profileKey);
       })
   }
 

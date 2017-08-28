@@ -42,11 +42,17 @@ export class LoginPageComponent implements OnInit {
     //alert("submitted by email" + this.email + this.password);
   }
   loginWithGoogle() {
-    this.authService.loginWithGoogle();
+    this.authService.loginWithGoogle()
+      .catch(error => {
+        alert("There was an error: " + error.message);
+      })
     // alert("login with Google");
   }
   loginWithFacebook() {
-    this.authService.loginWithFacebook();
+    this.authService.loginWithFacebook()
+      .catch(error => {
+        alert("There was an error: " + error.message);
+      })
     // alert("login with Facebook");
   }
 

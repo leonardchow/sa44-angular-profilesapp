@@ -1,11 +1,13 @@
 <div class="row">
   <div class="col-sm-12">
-    <h3>Create a profile</h3>
+    <h3>
+      {{ isEditing ? 'Update your profile' : 'Create a profile' }}
+    </h3>
     <div *ngIf="formInvalid">
       <div class="alert alert-danger">Please fill in all fields!</div>
     </div>
     <div *ngIf="isEditing">
-      <div class="alert alert-warning">You already have a profile!</div>
+      <div class="alert alert-info">Make changes and hit 'Save changes' below!</div>
     </div>
     <div *ngIf="true" class="col-sm-4">
 
@@ -47,6 +49,9 @@
 
         <div class="form-group">
           <label for="skills">Skills</label>
+          <p>
+            (separate skills with commas e.g. "awesome skill, another great skill")
+          </p>
           <div style="padding-bottom: 10px">
             <span *ngFor="let skill of model.skills; let i = index">
               <span class="label label-info">{{skill}}</span>
@@ -58,13 +63,15 @@
         </div>
 
         <div class="form-group">
-          <label for="file">Upload photo</label>
+          <label for="file">{{isEditing ? 'Change photo' : 'Upload photo'}}</label>
           <input class="form-control" type="file" id="file"
             (change)="onChangeFile($event)"
           />
         </div>
 
-        <input class="btn btn-default" type="submit" value="Create Profile" />
+        <input class="btn btn-primary" type="submit"
+          [value]="isEditing ? 'Save changes' : 'Create Profile'"
+        />
 
       </form>
 

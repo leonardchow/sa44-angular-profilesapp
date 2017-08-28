@@ -38,6 +38,30 @@ export default class ProfileModel {
     return age;
   }
 
+  static prepareForUpdate(model: ProfileModel): {} {
+
+    // public key = null,
+    // public likes: string[] = [],
+    // public visible: boolean = true,
+    // public email: string = "",
+    // public name: string = "",
+    // public phone: string = "",
+    // public birthdate: number = null,
+    // public photoUrl: string = "",
+    // public skills: string[] = [""],
+    // public comments: Comment[] = [],
+
+    let payload = {
+      email: model.email,
+      name: model.name,
+      phone: model.phone,
+      birthdate: model.birthdate,
+      photoUrl: model.photoUrl,
+      skills: model.skills,
+    };
+    return payload;
+  }
+
   static inflateProfile(element): ProfileModel {
     let key = element.key;
     let user = element.val();
@@ -62,7 +86,7 @@ export default class ProfileModel {
     user.visible = true;
     
     // Hook up instance methods
-    user.getAge = this.prototype.getAge;;
+    user.getAge = this.prototype.getAge;
     return user;
   }
 }

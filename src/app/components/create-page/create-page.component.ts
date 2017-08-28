@@ -6,6 +6,8 @@ import { FirebaseDatabaseService } from "../../providers/firebase-database.servi
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs/Subscription";
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-create-page',
   templateUrl: './create-page.component.html',
@@ -32,6 +34,10 @@ export class CreatePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.model = new ProfileModel();
     this.authSub = this.authService.user.subscribe(user => {
+      if (user == null) {
+        return;
+      }
+
       this.model.email = user.email;
       this.databaseService.doesUserHaveProfile(user.email)
         .then(data => {
@@ -42,6 +48,14 @@ export class CreatePageComponent implements OnInit, OnDestroy {
             this.databaseService.getProfile(data.profileKey)
               .then(data => {
                 this.model = data;
+                //console.log(data);
+
+                // Format birthday
+                let birthdateString = moment(new Date( data.birthdate)).format("YYYY-MM-DD");
+                this.birthdateString = birthdateString;
+
+                // Format skills
+                this.skillsEntry = data.skills.join(', ');
               })
           }
 
@@ -88,8 +102,14 @@ export class CreatePageComponent implements OnInit, OnDestroy {
       this.formInvalid = false;
     }
 
-    if (this.currentPhoto == null) {
+    if (!this.isEditing && this.currentPhoto == null) {
       alert("Please give a profile photo!");
+      return;
+    }
+
+    if (this.isEditing && this.currentPhoto == null) {
+      // You haven't chosen a new photo, so just update
+      this._saveProfile(this.model);
       return;
     }
   
@@ -97,15 +117,23 @@ export class CreatePageComponent implements OnInit, OnDestroy {
     console.log(photo);
     console.log(this.model);
     
-    this.storageService.uploadFile(this.model.email, photo)
-      .then(({filename, downloadUrl}) => {
-        this.model.photoUrl = downloadUrl;
+    this._uploadFileAndSaveProfile(this.model.email, photo)
+  }
 
-        this.databaseService.saveNewProfile(this.model)
-          .then(_ => {
-            this.router.navigate(['']);
-          })
-      })
+  _uploadFileAndSaveProfile(email: string, photo: File) {
+    this.storageService.uploadFile(email, photo, this.isEditing)
+    .then(({filename, downloadUrl}) => {
+      this.model.photoUrl = downloadUrl;
+
+      this._saveProfile(this.model);
+    })
+  }
+
+  _saveProfile(model: ProfileModel) {
+    this.databaseService.saveNewProfile(model, this.isEditing)
+    .then(_ => {
+      this.router.navigate(['']);
+    })
   }
 
 }
