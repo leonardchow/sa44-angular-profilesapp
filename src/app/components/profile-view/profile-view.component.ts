@@ -99,8 +99,12 @@ export class ProfileViewComponent implements OnInit, OnDestroy {
   }
 
   submitComment(event) {
+    event.preventDefault();
     let comment = this.newComment;
-
+    if (comment.trim().length === 0) {
+      this.newComment = "";
+      return;
+    }
     this.databaseService.makeNewComment(this.profileKey, this.userEmail, comment);
 
     this.newComment = "";
